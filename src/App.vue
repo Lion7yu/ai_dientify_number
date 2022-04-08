@@ -56,7 +56,7 @@ const canvasMouseUpHandler = () => {
 //加载本地模型或者创建一个新的模型
 const loadOrCreateModel = async () => {
   try {
-    trainingModel = await tf.loadLayersModel('file://path/to/my-model/model.json')
+    trainingModel = await tf.loadLayersModel('localstorage://my-model')
   } catch (e) {
     console.warn("Can not load trainingModel from LocalStorage, create a new trainingModel")
     trainingModel = tf.sequential({
@@ -105,7 +105,7 @@ const btnTrainClickedHandler = async () => {
     epochs: 100,
     callbacks: {
       onEpochEnd(epoch: number, logs: tf.Logs | undefined) { //在某一个阶段完成的时候
-        trainStatus.value = `<div>Step: ${epoch}</div><div>Loss: ${logs.loss}</div>`;
+        trainStatus.value = `<div>Step: ${epoch}</div><div>Loss: ${logs?.loss}</div>`;
       }
     }
   })
@@ -113,7 +113,7 @@ const btnTrainClickedHandler = async () => {
   console.log("Completed")
 
   //把训练模型保存在本地
-  await trainingModel.save('file:///path/to/my-model')
+  await trainingModel.save('localstorage://my-model')
 }
 
 const btnPredictClickedHandler = async () => {
